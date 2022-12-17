@@ -2,15 +2,20 @@
 #include <algorithm>
 #include <iterator>
 #include <utility>
+
 pros::Controller Controller1(pros::E_CONTROLLER_MASTER);
 
-pros::Motor left_motor1 (1,pros::E_MOTOR_GEARSET_36,true);
-pros::Motor left_motor2(2,pros::E_MOTOR_GEARSET_36,true);
-pros::Motor left_motor3(3,pros::E_MOTOR_GEARSET_36,true);
-pros::Motor right_motor1(4,pros::E_MOTOR_GEARSET_36,false);
-pros::Motor right_motor2(5,pros::E_MOTOR_GEARSET_36,false);
-pros::Motor right_motor3(8,pros::E_MOTOR_GEARSET_36,false);
+pros::Motor left_motor1 (4,pros::E_MOTOR_GEARSET_06,true);
+pros::Motor left_motor2(3,pros::E_MOTOR_GEARSET_06,true);
+pros::Motor left_motor3(1,pros::E_MOTOR_GEARSET_06,true);
+pros::Motor right_motor1(20,pros::E_MOTOR_GEARSET_06,false);
+pros::Motor right_motor2(12,pros::E_MOTOR_GEARSET_06,false);
+pros::Motor right_motor3(11,pros::E_MOTOR_GEARSET_06,false);
+pros::Motor fly_motor(8,pros::E_MOTOR_GEARSET_06,true);
+pros::Motor intake_motor(19,pros::E_MOTOR_GEARSET_18,false);
 
+pros::ADIDigitalOut piston(1, false);
+pros::ADIDigitalOut piston2(2, false);
 /**
  * A callback function for LLEMU's center button.
  *
@@ -172,7 +177,7 @@ while (nerror < -0.5)
 void Lturn(){
 	float lt = 0; 
 	right_motor1.set_zero_position(0);
-	while(lt < 0.1121) 
+	while(lt < 0.82) 
 	{
 		lt = right_motor1.get_position();
 		left_motor1.move(-127);
@@ -193,7 +198,7 @@ void Lturn(){
 void Rturn(){
 	float rt = 0;
 	left_motor1.set_zero_position(0);
-	while (rt < 0.1121) {
+	while (rt < 0.82) {
 		rt = left_motor1.get_position();
 		left_motor1.move(127);
 		left_motor2.move(127);
@@ -220,7 +225,8 @@ while (true)
 }
 
 void opcontrol() {
-
+bool mstate = true;
+int speed = 106;
 while(true) {
 left_motor1.move(Controller1.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
 left_motor2.move(Controller1.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
@@ -228,24 +234,59 @@ left_motor3.move(Controller1.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
 right_motor1.move(Controller1.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y));
 right_motor2.move(Controller1.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y));
 right_motor3.move(Controller1.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y));
- 
-pros::Motor fly_motor(10,pros::E_MOTOR_GEARSET_36,true);
+
+if (Controller1.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) 
+{
+	if (mstate)
+	{
+		speed = 127;
+		Controller1.rumble(".-.-.");
+	}
+	if (!mstate)
+	{
+		speed = 106;
+		Controller1.rumble("..");
+	}
+	mstate = !mstate;
+}
 if (Controller1.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) 
 {
-	fly_motor.move(127);
+	fly_motor.move(-speed);
+	Controller1.rumble(".");
 }
 if (Controller1.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) 
 {
 	fly_motor.brake();
+	Controller1.rumble("..");
 }
-if (Controller1.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2)) 
+if (Controller1.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A))
 {
-	PID(10); 
+	intake_motor.move(127);
 }
-if (Controller1.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) 
+if (Controller1.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X))
 {
-	NPID(-10); 
+	intake_motor.brake();
+	Controller1.rumble(".-");
 }
+if (Controller1.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y))
+{
+	intake_motor.move(-127);
+}
+if (Controller1.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2))
+{
+	piston.set_value(true);
+	pros::delay(27);
+	piston.set_value(false);
+}
+if (Controller1.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B))
+{
+	piston2.set_value(true);
+	pros::delay(250);
+	piston2.set_value(false);
+}
+	double velocity = fly_motor.get_actual_velocity();
+	std::string velocity2 = std::to_string(velocity);
+	Controller1.set_text(1,1,velocity2);
 if (Controller1.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT))
 {
 	Lturn(); 
@@ -256,28 +297,52 @@ if (Controller1.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT))
 }
 if (Controller1.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP))
 {
-	PID(20);
-	Lturn(); 
-	PID(15);
-	Rturn();
-	PID(10);
-	Lturn();
-	PID(15);
-	Lturn();
-	PID(10);
-	Lturn();
-	PID(10);
-	Rturn();
-	PID(15);
-	Lturn();
-	PID(10);
+
+	intake_motor.move(127);
+	left_motor1.move(-127);
+	left_motor2.move(-127);
+	left_motor3.move(-127);
+	right_motor1.move(-127);
+	right_motor2.move(-127);
+	right_motor3.move(-127);
+	pros::delay(800);
+	intake_motor.brake();
+	left_motor1.brake();
+	left_motor2.brake();
+	left_motor3.brake();
+	right_motor1.brake();
+	right_motor2.brake();
+	right_motor3.brake();
+	fly_motor.move(-127);
+	pros::c::delay(5000);
+	piston.set_value(true);
+	pros::delay(27);
+	piston.set_value(false);
+	pros::c::delay(5000);
+	piston.set_value(true);
+	pros::delay(27);
+	piston.set_value(false);
 }
 pros::delay(30);
 }
 }
 
 void autonomous() {
-
+	intake_motor.move(-127);
+	left_motor1.move(-127);
+	left_motor2.move(-127);
+	left_motor3.move(-127);
+	right_motor1.move(-127);
+	right_motor2.move(-127);
+	right_motor3.move(-127);
+	pros::delay(400);
+	intake_motor.brake();
+	left_motor1.brake();
+	left_motor2.brake();
+	left_motor3.brake();
+	right_motor1.brake();
+	right_motor2.brake();
+	right_motor3.brake();
 }
 
 /**
@@ -293,3 +358,4 @@ void autonomous() {
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
+
