@@ -6,7 +6,7 @@
 *.bin
 *.elf
 *.idx
-
+.cache
 # PROS
 bin/
 .vscode/
