@@ -1,4 +1,5 @@
 #include "main.h"
+#include "sylib/sylib.hpp"
 #include <algorithm>
 #include <iterator>
 #include <utility>
@@ -39,6 +40,7 @@ void on_center_button() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
+  sylib::initialize();
 	pros::lcd::initialize();
 	pros::lcd::set_text(1, "Hello PROS User!");
 
