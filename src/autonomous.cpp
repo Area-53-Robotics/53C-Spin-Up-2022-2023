@@ -1,3 +1,4 @@
+#include "main.h"
 #include "devices.hpp"
 #include "utilities.hpp"
 
@@ -16,14 +17,15 @@ void competition_initialize() {
 
 void autonomous() {
   if (auton_mode) {
+    move(-80);
     roller();
-    fly_motor.move(-97);
+    fly_motor.move(97);
     pros::delay(2000);
     move(80);
     pros::delay(50);
     brake();
     pros::delay(100);
-    move(80, true);
+    move(50, true);
     pros::delay(1050);
     brake();
     pros::delay(800);
@@ -32,7 +34,7 @@ void autonomous() {
     shoot();
     fly_motor.brake();
   } else {
-    fly_motor.move(-93);
+    fly_motor.move(93);
     pros::delay(3000);
     shoot();
     pros::delay(2500);
