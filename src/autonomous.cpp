@@ -25,7 +25,7 @@ void autonomous() {
     pros::delay(50);
     brake();
     pros::delay(100);
-    move(50, true);
+    move(75, true);
     pros::delay(1050);
     brake();
     pros::delay(800);
