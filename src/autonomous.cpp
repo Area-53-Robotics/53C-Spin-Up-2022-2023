@@ -2,14 +2,14 @@
 #include "main.h"
 #include "utilities.hpp"
 
-bool auton_mode = true;
+bool auton_roller = true;
 void competition_initialize() {
   if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
-    auton_mode = !auton_mode;
-    if (auton_mode) {
+    auton_roller = !auton_roller;
+    if (auton_roller) {
       controller.rumble(".-.-.");
     }
-    if (!auton_mode) {
+    if (!auton_roller) {
       controller.rumble("....");
     }
   }
@@ -22,7 +22,7 @@ brake();
 */
 
 void autonomous() {
-  if (auton_mode) {
+  if (auton_roller) {
     move(-80);
     roller();
     fly_motor.move(97);
