@@ -7,6 +7,7 @@ void move(int volt);
 void move(int volt, bool left);
 void move(int volt, double delay);
 void move(int volt, bool left, double delay);
+void turn(int volt, bool left);
 void expansion();
 void shoot();
 void roller();

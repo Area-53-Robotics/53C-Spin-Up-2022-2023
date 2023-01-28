@@ -1,5 +1,5 @@
-#include "main.h"
 #include "devices.hpp"
+#include "main.h"
 #include "utilities.hpp"
 
 bool auton_mode = true;
@@ -14,6 +14,12 @@ void competition_initialize() {
     }
   }
 }
+
+/*
+turn(80, true);
+pros::delay(500);
+brake();
+*/
 
 void autonomous() {
   if (auton_mode) {
@@ -40,5 +46,12 @@ void autonomous() {
     pros::delay(2500);
     shoot();
     fly_motor.brake();
+    move(-80);
+    pros::delay(400);
+    brake();
+    move(-80, false);
+    pros::delay(1210);
+    brake();
+    roller();
   }
 }

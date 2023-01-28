@@ -32,6 +32,17 @@ void move(int volt, bool left, double delay) {
   brake();
 }
 
+void turn(int volt, bool left) {
+  if (left == true) {
+    left_motors.move(volt);
+    right_motors.move(-volt);
+  }
+  if (left == false) {
+    left_motors.move(-volt);
+    right_motors.move(volt);
+  }
+}
+
 void expansion() {
   string_launcher.set_value(true);
   pros::delay(300);
