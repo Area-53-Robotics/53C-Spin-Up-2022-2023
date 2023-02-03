@@ -1,5 +1,6 @@
 #include "utilities.hpp"
 #include "devices.hpp"
+#include "cmath"
 
 void brake() {
   left_motors.brake();
@@ -7,7 +8,18 @@ void brake() {
 }
 
 void move_pid(float distance) {
-  
+  left_tracking_wheel.reset();
+  float error = distance;
+  float current_position;
+  float power;
+  float kp;
+  while (error > 0.5) {
+    current_position = M_PI*2.75 / 3600 * left_tracking_wheel.get_position();
+    error = distance - current_position;
+    power = error * kp;
+    left_motors.move(power);
+    right_motors.move(power);
+  }
 }
 
 void move(int volt) {

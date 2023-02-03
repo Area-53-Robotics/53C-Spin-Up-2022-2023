@@ -39,7 +39,8 @@ void autonomous() {
     pros::delay(2000);
     shoot();
     fly_motor.brake();
-  } else {
+  } 
+  else {
     fly_motor.move(93);
     pros::delay(3000);
     shoot();

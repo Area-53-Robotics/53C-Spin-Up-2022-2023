@@ -1,6 +1,7 @@
 #include "devices.hpp"
 #include "main.h"
 #include "utilities.hpp"
+#include "sylib/sylib.hpp"
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -37,7 +38,7 @@ void opcontrol() {
       }
       flywheel_state = !flywheel_state;
     }
-    	// Toggles indexer
+    // Toggles indexer
     if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2)) {
       indexer.set_value(true);
       pros::delay(27);
@@ -67,11 +68,27 @@ void opcontrol() {
       intake_motor.move(-127);
     }
     // Launch string
-    if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B) &&
-        controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+    if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B) && controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
       string_launcher.set_value(true);
       pros::delay(250);
       string_launcher.set_value(false);
     }
-  }
+    // Set LEDs to Red Alliance
+    if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+      led_strip.set_all(0xFF0000);
+      led_strip.cycle(*led_strip, 20);
+    }
+    // Set LEDs to Blue Alliance
+    if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+      led_strip.set_all(0x0000FF);
+    }
+    // Set LEDs to Alien Alliance
+    if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
+      led_strip.set_all(0x00FF00);
+    }
+    // Turn off LEDs
+    if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+      led_strip.clear();
+    } 
+  }  
 }
