@@ -6,6 +6,10 @@ void brake() {
   right_motors.brake();
 }
 
+void move_pid(float distance) {
+  
+}
+
 void move(int volt) {
   left_motors.move(volt);
   right_motors.move(volt);

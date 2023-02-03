@@ -1,5 +1,6 @@
 #include "main.h"
 #include "devices.hpp"
+#include "sylib/sylib.hpp"
 
 /**
  * A callback function for LLEMU's center button.
@@ -32,6 +33,8 @@ void initialize() {
 	left_motors.set_reversed(true);
 	left_motors.set_gearing(pros::E_MOTOR_GEARSET_06);
 	right_motors.set_gearing(pros::E_MOTOR_GEARSET_06);
+
+	sylib::initialize();
 }
 
 /**

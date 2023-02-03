@@ -3,6 +3,7 @@
 #include "api.h"
 
 void brake();
+void move_pid(float distance);
 void move(int volt);
 void move(int volt, bool left);
 void move(int volt, double delay);

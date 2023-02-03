@@ -1,6 +1,8 @@
 #pragma once
 
 #include "api.h"
+#include "pros/adi.hpp"
+#include "sylib/sylib.hpp"
 
 inline pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
@@ -21,3 +23,7 @@ inline pros::Motor_Group right_motors({20, 12, 11});
 
 inline pros::ADIDigitalOut indexer(1, false);
 inline pros::ADIDigitalOut string_launcher(2, false);
+
+inline pros::ADIEncoder tracking_wheels(3, 4);
+
+inline sylib::Addrled led_strip(22, 5, 10);
