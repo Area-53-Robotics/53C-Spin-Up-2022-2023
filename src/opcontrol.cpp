@@ -73,22 +73,10 @@ void opcontrol() {
       pros::delay(250);
       string_launcher.set_value(false);
     }
-    // Set LEDs to Red Alliance
-    if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
-      led_strip.set_all(0xFF0000);
-      led_strip.cycle(*led_strip, 20);
-    }
-    // Set LEDs to Blue Alliance
-    if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
-      led_strip.set_all(0x0000FF);
-    }
-    // Set LEDs to Alien Alliance
-    if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
-      led_strip.set_all(0x00FF00);
-    }
+    
     // Turn off LEDs
-    if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+    if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
       led_strip.clear();
-    } 
+    }
   }  
 }
