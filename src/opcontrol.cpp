@@ -19,6 +19,13 @@
 void opcontrol() {
   bool flywheel_state = true;
   int flywheel_speed = 127;
+  int current_color = 1;
+
+  enum Colors {
+    Red = 0xFF0000,
+    Blue = 0x0000FF,
+    Green = 0x00FF00
+  };
 
   while (true) {
 	  // Move drivetrain
@@ -73,10 +80,28 @@ void opcontrol() {
       pros::delay(250);
       string_launcher.set_value(false);
     }
-    
-    // Turn off LEDs
-    if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
-      led_strip.clear();
+    // Change LEDs
+    if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
+      switch (current_color) {
+        // Red Alliance
+        case 1:
+          led_strip.set_all(Red);
+          break;
+        // Blue Alliance
+        case 2:
+          led_strip.set_all(Blue);
+          break;
+        // Green Alliance
+        case 3:
+          led_strip.set_all(Green);
+          break;
+        // Turn LEDs off
+        default:
+          led_strip.clear();
+          break;
+      }
+      current_color++;
     }
+    printf("%i",current_color);
   }  
 }

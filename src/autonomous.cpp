@@ -22,13 +22,10 @@ brake();
 */
 
 void autonomous() {
-  // Shoots a single disc and allows the flywheel to spin again
-  shoot();
-  pros::delay(6000);
-  // Shoots loaded discs every 4 seconds
+  // Shoots loaded discs every 3 seconds
   for (int discs = 10; discs > 0; discs--) {
     shoot();
-    pros::delay(4000);
+    pros::delay(3000);
   }
 
   /*
