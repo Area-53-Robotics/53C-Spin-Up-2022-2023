@@ -22,6 +22,13 @@ brake();
 */
 
 void autonomous() {
+  // Shoots loaded discs every 3 seconds
+  for (int discs = 10; discs > 0; discs--) {
+    shoot();
+    pros::delay(3000);
+  }
+
+  /*
   if (auton_roller) {
     move(-80);
     roller();
@@ -53,6 +60,5 @@ void autonomous() {
     move(-80, false);
     pros::delay(1210);
     brake();
-    roller();
-  }
+    roller();*/
 }
